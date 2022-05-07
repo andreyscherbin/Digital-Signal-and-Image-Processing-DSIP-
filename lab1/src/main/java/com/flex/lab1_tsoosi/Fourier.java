@@ -4,28 +4,24 @@ import java.util.ArrayList;
 
 public class Fourier {
 
-  public static ArrayList<Complex> discreteFourier(ArrayList<Complex> a, int N, int dir,
+  public static ArrayList<Complex> discreteFourier(ArrayList<Complex> samples, int N, int dir,
       Counter mul, Counter add) {
     ArrayList<Complex> result = new ArrayList<>();
     for (int k = 0; k < N; k++) {
       Complex temp = new Complex(0.0, 0.0);
       for (int n = 0; n < N; n++) {
         double argument = 2 * Math.PI * k * n / N;
-        temp = temp.plus(a.get(n).times(new Complex(Math.cos(argument),
+        temp = temp.plus(samples.get(n).times(new Complex(Math.cos(argument),
             dir * Math.sin(argument))));
         mul.mulDFT();
         add.incDFT();
-      }
-      if (dir == 1) {
-        temp = temp.divides(N);
       }
       result.add(temp);
     }
     return result;
   }
 
-  public static void fastFourier(ArrayList<Complex> a, int N, int dir, Counter mul,
-      Counter add) {
+  public static void fastFourier(ArrayList<Complex> a, int N, int dir, Counter mul, Counter add) {
     if (a.size() == 1) {
       return;
     }

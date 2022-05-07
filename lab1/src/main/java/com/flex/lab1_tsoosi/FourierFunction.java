@@ -3,6 +3,7 @@ package com.flex.lab1_tsoosi;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FourierFunction {
 
@@ -25,22 +26,6 @@ public class FourierFunction {
     for (int i = 0; i < N; i++) {
       graphHash.put(2 * i * Math.PI / N,
           Math.sin(2 * i * Math.PI / N) + Math.cos(4 * (2 * i * Math.PI / N)));
-    }
-    return graphHash;
-  }
-
-  public static Map<Double, Double> getCosOriginalGraph() {
-    Map<Double, Double> graphHash = new HashMap<>();
-    for (int i = 0; i < N; i++) {
-      graphHash.put(2 * i * Math.PI / N, Math.cos(4 * 2 * i * Math.PI / N));
-    }
-    return graphHash;
-  }
-
-  public static Map<Double, Double> getSinOriginalGraph() {
-    Map<Double, Double> graphHash = new HashMap<>();
-    for (int i = 0; i < N; i++) {
-      graphHash.put(2 * i * Math.PI / N, Math.sin(2 * i * Math.PI / N));
     }
     return graphHash;
   }
@@ -86,9 +71,10 @@ public class FourierFunction {
     Counter add = new Counter();
     if (fourierType == 0) {
       Fourier.fastFourier(listFFT, N, 1, mul, add);
-      fourierList = listFFT;
+      fourierList = (ArrayList<Complex>) listFFT.stream().map(e -> e.divides(N)).collect(Collectors.toList());
     } else {
       fourierList = Fourier.discreteFourier(listDFT, N, 1, mul, add);
+      fourierList = (ArrayList<Complex>) fourierList.stream().map(e -> e.divides(N)).collect(Collectors.toList());
     }
     for (int i = 0; i < N; i++) {
       result.put(2 * i * Math.PI / N, fourierList.get(i).getRe());
